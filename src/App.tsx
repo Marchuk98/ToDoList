@@ -2,13 +2,14 @@ import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
+import SuperInput from "./components/SuperInput";
 
 export type FilterValuesType = "all" | "completed" | "active"
 
 type TodoListType = {
     id: string
     title: string
-    filter: FilterValuesType
+    filter: string | FilterValuesType
 }
 
 function App() {
@@ -64,8 +65,33 @@ function App() {
         setTodolists([...todolists].map(el => el.id === todolistId ? {...el, filter: value} : el))
     }
 
+    const addTodolist = (newTitle: string) => {
+        let newTodoId = v1()
+        const newTodolist = {id: newTodoId, title: newTitle, filter: 'all'}
+        setTodolists([...todolists, newTodolist])
+        setTasks({
+            ...tasks, [newTodoId]: [
+                {id: v1(), title: "ReactJS", isDone: false},
+                {id: v1(), title: "Rest API", isDone: false},
+                {id: v1(), title: "GraphQL", isDone: false},
+            ]
+        })
+    }
+
+    const editSpan = (todolistId: string, taskId: string, newTask: string) => {
+        setTasks({
+            ...tasks,
+            [todolistId]: [...tasks[todolistId].map(el => el.id === taskId ? {...el, title: newTask} : el)]
+        })
+    }
+
+    const editTodo = (todolistId: string, newTask: string) => {
+        setTodolists(todolists.map(el => el.id === todolistId ? {...el, title: newTask} : el))
+    }
+
     return (
         <div className="App">
+            <SuperInput callBack={addTodolist}/>
             {todolists.map(el => {
                 let tasksForTodolist = tasks[el.id];
                 if (el.filter === "completed") {
@@ -84,7 +110,10 @@ function App() {
                               changeFilter={changeFilter}
                               addTask={addTask}
                               changeStatus={changeStatus}
-                              filter={el.filter}/>
+                              filter={el.filter}
+                              editSpan={editSpan}
+                              editTodo={editTodo}
+                    />
                 );
             })}
 
