@@ -1,5 +1,7 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent} from "react";
 import {FilterValuesType} from "./App";
+import EditableSpan from "./components/EditableSpan";
+import SuperInput from "./components/SuperInput";
 
 type TodolistPropsType = {
     todolistId: string
@@ -9,8 +11,10 @@ type TodolistPropsType = {
     changeFilter: (todolistId: string, value: FilterValuesType) => void
     addTask: (todolistId: string, title: string) => void
     changeStatus: (todolistId: string, taskId: string, isDone: boolean) => void
-    filter: FilterValuesType
+    filter: string | FilterValuesType
     removeTodolist: (todolistId: string) => void
+    editSpan: (todolistId: string, taskId: string, newTask: string) => void
+    editTodo: (todolistId: string, newTask: string) => void
 }
 export type TaskType = {
     id: string
@@ -18,29 +22,6 @@ export type TaskType = {
     isDone: boolean
 }
 export const Todolist = (props: TodolistPropsType) => {
-    let [newTaskTitle, setNewTaskTitle] = useState('');
-
-    let [error, setError] = useState<string | null>(null)
-
-    const addTaskHandler = () => {
-        if (newTaskTitle.trim() !== "") {
-            props.addTask(props.todolistId, newTaskTitle.trim());
-            setNewTaskTitle("")
-        } else {
-            setError('task is required')
-        }
-    }
-
-    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.currentTarget.value)
-    }
-
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
-        if (e.key === 'Enter') {
-            addTaskHandler();
-        }
-    }
 
     const onMainChangeFilter = (value: FilterValuesType) => {
         props.changeFilter(props.todolistId, value);
@@ -50,33 +31,41 @@ export const Todolist = (props: TodolistPropsType) => {
         props.removeTodolist(props.todolistId)
     }
 
+    const UniversalCallbackInputHandler = (newTitle: string) => {
+        props.addTask(props.todolistId, newTitle)
+    }
+
+    const editableTodolistSpanHandler = (newTask: string) => {
+        props.editTodo(props.todolistId, newTask)
+    }
+
     return (
         <div>
-            <h3>{props.title}
-                <button onClick={onClickRemoveTodolistHandler}>X</button>
-            </h3>
             <div>
-                <input
-                    value={newTaskTitle}
-                    onChange={onChangeInputHandler}
-                    onKeyDown={onKeyPressHandler}
-                    className={error ? 'error' : ""}
-                />
-                <button onClick={addTaskHandler}>+</button>
-                {error && <div className='error-message'>{error}</div>}
+                <h3>
+                    <EditableSpan title={props.title} callBack={editableTodolistSpanHandler}/>
+                    <button onClick={onClickRemoveTodolistHandler}>X</button>
+                </h3>
+                <SuperInput callBack={UniversalCallbackInputHandler}/>
             </div>
             <ul>
                 {
                     props.tasks.map(el => {
+
                         const onRemoveHandler = () => props.removeTask(props.todolistId, el.id);
+
                         const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             props.changeStatus(props.todolistId, el.id, e.currentTarget.checked)
+                        }
+
+                        const UniversalEditableSpanHandler = (newTitle: string) => {
+                            props.editSpan(props.todolistId, el.id, newTitle)
                         }
                         return (
                             <li key={el.id} className={el.isDone ? "is-Done" : ""}>
                                 <button onClick={onRemoveHandler}>X</button>
                                 <input type="checkbox" onChange={onChangeInputHandler} checked={el.isDone}/>
-                                <span>{el.title}</span>
+                                <EditableSpan title={el.title} callBack={UniversalEditableSpanHandler}/>
                             </li>
                         )
                     })
