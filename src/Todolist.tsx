@@ -2,6 +2,11 @@ import React, {ChangeEvent} from "react";
 import {FilterValuesType} from "./App";
 import EditableSpan from "./components/EditableSpan";
 import SuperInput from "./components/SuperInput";
+import IconButton from '@mui/material/IconButton/IconButton';
+import Delete from '@mui/icons-material/Delete';
+import Checkbox from '@mui/material/Checkbox';
+import Button from "@mui/material/Button";
+
 
 type TodolistPropsType = {
     todolistId: string
@@ -44,11 +49,13 @@ export const Todolist = (props: TodolistPropsType) => {
             <div>
                 <h3>
                     <EditableSpan title={props.title} callBack={editableTodolistSpanHandler}/>
-                    <button onClick={onClickRemoveTodolistHandler}>X</button>
+                    <IconButton onClick={onClickRemoveTodolistHandler}>
+                        <Delete/>
+                    </IconButton>
                 </h3>
                 <SuperInput callBack={UniversalCallbackInputHandler}/>
             </div>
-            <ul>
+            <div>
                 {
                     props.tasks.map(el => {
 
@@ -62,28 +69,31 @@ export const Todolist = (props: TodolistPropsType) => {
                             props.editSpan(props.todolistId, el.id, newTitle)
                         }
                         return (
-                            <li key={el.id} className={el.isDone ? "is-Done" : ""}>
-                                <button onClick={onRemoveHandler}>X</button>
-                                <input type="checkbox" onChange={onChangeInputHandler} checked={el.isDone}/>
+                            <div key={el.id} className={el.isDone ? "is-Done" : ""}>
+                                <IconButton onClick={onRemoveHandler}>
+                                    <Delete/>
+                                </IconButton>
+                                <Checkbox color={"success"} onChange={onChangeInputHandler} checked={el.isDone}/>
                                 <EditableSpan title={el.title} callBack={UniversalEditableSpanHandler}/>
-                            </li>
+                            </div>
                         )
                     })
                 }
-            </ul>
+            </div>
             <div>
-                <button className={props.filter === 'all' ? "active-filter" : ""} onClick={() => {
+                <Button variant={props.filter === 'all' ? "contained" : "text"} onClick={() => {
                     onMainChangeFilter('all')
                 }}>All
-                </button>
-                <button className={props.filter === 'active' ? "active-filter" : ""} onClick={() => {
+                </Button>
+                <Button variant={props.filter === 'active' ? "contained" : "text"} color={"primary"} onClick={() => {
                     onMainChangeFilter('active')
                 }}>Active
-                </button>
-                <button className={props.filter === 'completed' ? "active-filter" : ""} onClick={() => {
-                    onMainChangeFilter('completed')
-                }}>Completed
-                </button>
+                </Button>
+                <Button variant={props.filter === 'completed' ? "contained" : "text"} color={"secondary"}
+                        onClick={() => {
+                            onMainChangeFilter('completed')
+                        }}>Completed
+                </Button>
             </div>
         </div>
 

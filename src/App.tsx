@@ -3,6 +3,15 @@ import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import SuperInput from "./components/SuperInput";
+import IconButton from '@mui/material/IconButton';
+import AppBar from "@mui/material/AppBar";
+import Menu from "@mui/icons-material/Menu";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 export type FilterValuesType = "all" | "completed" | "active"
 
@@ -91,32 +100,53 @@ function App() {
 
     return (
         <div className="App">
-            <SuperInput callBack={addTodolist}/>
-            {todolists.map(el => {
-                let tasksForTodolist = tasks[el.id];
-                if (el.filter === "completed") {
-                    tasksForTodolist = tasks[el.id].filter(t => t.isDone);
-                }
-                if (el.filter === "active") {
-                    tasksForTodolist = tasks[el.id].filter(t => !t.isDone);
-                }
-                return (
-                    <Todolist key={el.id}
-                              todolistId={el.id}
-                              title={el.title}
-                              removeTodolist={removeTodolist}
-                              tasks={tasksForTodolist}
-                              removeTask={removeTask}
-                              changeFilter={changeFilter}
-                              addTask={addTask}
-                              changeStatus={changeStatus}
-                              filter={el.filter}
-                              editSpan={editSpan}
-                              editTodo={editTodo}
-                    />
-                );
-            })}
 
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <Menu/>
+                    </IconButton>
+                    <Typography variant="h6">
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+
+            <Container fixed>
+                <Grid container style={{padding: "20px"}}>
+                    <SuperInput callBack={addTodolist}/>
+                </Grid>
+                <Grid container spacing={3}>
+                    {todolists.map(el => {
+                        let tasksForTodolist = tasks[el.id];
+                        if (el.filter === "completed") {
+                            tasksForTodolist = tasks[el.id].filter(t => t.isDone);
+                        }
+                        if (el.filter === "active") {
+                            tasksForTodolist = tasks[el.id].filter(t => !t.isDone);
+                        }
+                        return (<Grid item>
+                                <Paper style={{padding: "10px"}}>
+                                    <Todolist key={el.id}
+                                              todolistId={el.id}
+                                              title={el.title}
+                                              removeTodolist={removeTodolist}
+                                              tasks={tasksForTodolist}
+                                              removeTask={removeTask}
+                                              changeFilter={changeFilter}
+                                              addTask={addTask}
+                                              changeStatus={changeStatus}
+                                              filter={el.filter}
+                                              editSpan={editSpan}
+                                              editTodo={editTodo}
+                                    />
+                                </Paper>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            </Container>
         </div>
     );
 }

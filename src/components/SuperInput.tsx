@@ -1,4 +1,7 @@
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import Add from "@mui/icons-material/Add";
 
 type SuperInputPropsType = {
     callBack: (newTitle: string) => void
@@ -35,12 +38,18 @@ const SuperInput = (props: SuperInputPropsType) => {
 
     return (
         <div>
-            <input className={error ? 'error' : ''}
-                   value={title}
-                   onChange={onChangeInputHandler}
-                   onKeyDown={onKeyPressHandler}/>
-            <button onClick={onClickAddTaskHandler}>+</button>
-            {error && <div className={'error-message'}>{error}</div>}
+            <TextField
+                variant="standard"
+                label={'Type value'}
+                error={!!error}
+                value={title}
+                onChange={onChangeInputHandler}
+                onKeyDown={onKeyPressHandler}
+                helperText={error}/>
+            <IconButton onClick={onClickAddTaskHandler}>
+                <Add sx={{fontSize: 40}} color={"success"}/>
+            </IconButton>
+
         </div>
     );
 };
