@@ -7,8 +7,9 @@ export type RemoveTodolistActionType = {
     id: string
 }
 export type AddTodolistActionType = {
-    type: "ADD-TODOLIST"
+    type: "ADD-TODO-LIST"
     title: string
+    todolistId:string
 }
 export type ChangeTodolistTitleActionType = { 
     type: "CHANGE-TODOLIST-TITLE"
@@ -34,9 +35,9 @@ export const todolistsReducer = (state: TodoListType[], action: ActionType): Tod
 
             return state.filter(el => el.id !== action.id)
         }
-        case "ADD-TODOLIST" : {
+        case "ADD-TODO-LIST" : {
             return [...state, {
-                id: v1(),
+                id: action.todolistId,
                 title: action.title,
                 filter: "all"
             }]
@@ -52,19 +53,20 @@ export const todolistsReducer = (state: TodoListType[], action: ActionType): Tod
     }
 }
 
-export const RemoveTodolistAC = (todolistId: string): RemoveTodolistActionType => {
+export const removeTodolistAC = (todolistId: string): RemoveTodolistActionType => {
     return {
         type: 'REMOVE-TODOLIST',
         id: todolistId
     }
 }
-export const AddTodolistAC = (title: string):AddTodolistActionType => {
+export const addTodolistAC = (title: string):AddTodolistActionType => {
     return {
-        type: 'ADD-TODOLIST',
-        title: title
+        type: 'ADD-TODO-LIST',
+        title: title,
+        todolistId:v1()
     }
 }
-export const ChangeTodolistTitleAC = (id:string,title:string):ChangeTodolistTitleActionType => {
+export const changeTodolistTitleAC = (id:string, title:string):ChangeTodolistTitleActionType => {
     return {
         type: 'CHANGE-TODOLIST-TITLE',
         id:id,
@@ -72,7 +74,7 @@ export const ChangeTodolistTitleAC = (id:string,title:string):ChangeTodolistTitl
     }
 }
 
-export const ChangeTodolistFilterAC = (id: string,filter:FilterValuesType):ChangeTodolistFilterActionType => {
+export const changeTodolistFilterAC = (id: string, filter:FilterValuesType):ChangeTodolistFilterActionType => {
     return {
         type: 'CHANGE-TODOLIST-FILTER',
         id: id,
