@@ -1,4 +1,4 @@
-import {FilterValuesType, TodoListType} from "../AppWithReducers";
+import {FilterValuesType, TodoListType} from "../AppWithRedux";
 import {v1} from "uuid";
 
 
@@ -35,7 +35,9 @@ type ActionType =
     | ChangeTodolistFilterActionType
     | editTodoActionType
 
-export const todolistsReducer = (state: TodoListType[], action: ActionType): TodoListType[] => {
+const initialState:TodoListType[] = []
+
+export const todolistsReducer = (state: TodoListType[] = initialState, action: ActionType): TodoListType[] => {
     switch (action.type) {
 
         case "REMOVE-TODOLIST": {
@@ -54,8 +56,7 @@ export const todolistsReducer = (state: TodoListType[], action: ActionType): Tod
         case "CHANGE-TODOLIST-FILTER": {
             return state.map(el => el.id === action.id ? {...el, filter: action.filter} : el)
         }
-        default:
-            throw  new Error("I don't understand this action type")
+        default: return state
     }
 }
 
