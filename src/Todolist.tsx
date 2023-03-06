@@ -1,24 +1,22 @@
 import React, {ChangeEvent} from "react";
-import {FilterValuesType} from "./App";
+import {FilterValuesType} from "./AppWithRedux";
 import EditableSpan from "./components/EditableSpan";
 import SuperInput from "./components/SuperInput";
 import IconButton from '@mui/material/IconButton/IconButton';
 import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import Button from "@mui/material/Button";
+import {addTaskAC, changeTaskStatusAC, editSpanAC, removeTaskAC} from "./state/tasks-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootState} from "./state/store";
 
 
 type TodolistPropsType = {
     todolistId: string
     title: string
-    tasks: TaskType[]
-    removeTask: (todolistId: string, id: string) => void
     changeFilter: (todolistId: string, value: FilterValuesType) => void
-    addTask: (todolistId: string, title: string) => void
-    changeStatus: (todolistId: string, taskId: string, isDone: boolean) => void
     filter: string | FilterValuesType
     removeTodolist: (todolistId: string) => void
-    editSpan: (todolistId: string, taskId: string, newTask: string) => void
     editTodo: (todolistId: string, newTask: string) => void
 }
 export type TaskType = {
@@ -28,6 +26,10 @@ export type TaskType = {
 }
 export const Todolist = (props: TodolistPropsType) => {
 
+    const dispatch = useDispatch()
+
+    const tasks = useSelector<AppRootState, TaskType[]>(state => state.tasks[props.todolistId])
+
     const onMainChangeFilter = (value: FilterValuesType) => {
         props.changeFilter(props.todolistId, value);
     }
@@ -36,12 +38,20 @@ export const Todolist = (props: TodolistPropsType) => {
         props.removeTodolist(props.todolistId)
     }
 
-    const UniversalCallbackInputHandler = (newTitle: string) => {
-        props.addTask(props.todolistId, newTitle)
+    const addTask = (title: string) => {
+        dispatch(addTaskAC(props.todolistId, title))
     }
 
     const editableTodolistSpanHandler = (newTask: string) => {
         props.editTodo(props.todolistId, newTask)
+    }
+
+    let tasksForTodolist = tasks;
+    if (props.filter === "completed") {
+        tasksForTodolist = tasks.filter(t => t.isDone);
+    }
+    if (props.filter === "active") {
+        tasksForTodolist = tasks.filter(t => !t.isDone);
     }
 
     return (
@@ -53,20 +63,20 @@ export const Todolist = (props: TodolistPropsType) => {
                         <Delete/>
                     </IconButton>
                 </h3>
-                <SuperInput callBack={UniversalCallbackInputHandler}/>
+                <SuperInput callBack={addTask}/>
             </div>
             <div>
                 {
-                    props.tasks.map(el => {
+                    tasksForTodolist.map(el => {
 
-                        const onRemoveHandler = () => props.removeTask(props.todolistId, el.id);
+                        const onRemoveHandler = () =>  dispatch(removeTaskAC(props.todolistId, el.id))
 
                         const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                            props.changeStatus(props.todolistId, el.id, e.currentTarget.checked)
+                            dispatch(changeTaskStatusAC(props.todolistId, el.id, e.currentTarget.checked))
                         }
 
                         const UniversalEditableSpanHandler = (newTitle: string) => {
-                            props.editSpan(props.todolistId, el.id, newTitle)
+                            dispatch(editSpanAC(props.todolistId, el.id, newTitle))
                         }
                         return (
                             <div key={el.id} className={el.isDone ? "is-Done" : ""}>
