@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import SuperInput from "./components/SuperInput";
@@ -19,6 +19,7 @@ import {
 } from "./state/todolist-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "./state/store";
+import {addTaskAC, changeTaskStatusAC, editSpanAC, removeTaskAC} from "./state/tasks-reducer";
 
 export type FilterValuesType = "all" | "completed" | "active"
 
@@ -34,25 +35,50 @@ export type TasksStateType = {
 
 function AppWithRedux() {
 
+    console.log('App is called')
+
     const dispatch = useDispatch()
     const todolists = useSelector<AppRootState, TodoListType[]>(state => state.todolists)
+    const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
 
-    const removeTodolist = (todolistId: string) => {
+    const removeTodolist = useCallback((todolistId: string) => {
         const action = removeTodolistAC(todolistId)
         dispatch(action)
-    }
+    }, [dispatch])
 
-    function changeFilter(todolistId: string, value: FilterValuesType) {
+    const removeTask = useCallback((todolistId: string, taskId: string) => {
+        const action = removeTaskAC(todolistId, taskId)
+        dispatch(action)
+    },[dispatch])
+
+    const changeStatus = useCallback((todolistId: string, taskId: string, isDone: boolean) => {
+        const action = changeTaskStatusAC(todolistId, taskId, isDone)
+        dispatch(action)
+    },[dispatch])
+
+    const addTask = useCallback((todolistId: string, title: string) => {
+        const action = addTaskAC(todolistId, title)
+        dispatch(action)
+    },[dispatch])
+
+    const changeFilter = useCallback((todolistId: string, value: FilterValuesType) => {
         dispatch(changeTodolistFilterAC(todolistId, value))
-    }
+    }, [dispatch])
 
-    const addTodolist = (newTitle: string) => {
+    const addTodolist = useCallback((newTitle: string) => {
         const action = addTodolistAC(newTitle)
         dispatch(action)
-    }
-    const editTodo = (todolistId: string, newTask: string) => {
+    }, [dispatch])
+
+    const editSpan = useCallback((todolistId: string, taskId: string, newTask: string) => {
+        const action = editSpanAC(todolistId, taskId, newTask)
+        dispatch(action)
+    },[dispatch])
+
+    const editTodo = useCallback((todolistId: string, newTask: string) => {
         dispatch(editTodoAC(todolistId, newTask))
-    }
+    }, [dispatch])
+
 
     return (
         <div className="App">
@@ -81,8 +107,13 @@ function AppWithRedux() {
                                               todolistId={el.id}
                                               title={el.title}
                                               removeTodolist={removeTodolist}
+                                              tasks={tasks[el.id]}
+                                              removeTask={removeTask}
                                               changeFilter={changeFilter}
+                                              addTask={addTask}
+                                              changeStatus={changeStatus}
                                               filter={el.filter}
+                                              editSpan={editSpan}
                                               editTodo={editTodo}
                                     />
                                 </Paper>

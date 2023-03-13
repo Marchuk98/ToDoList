@@ -8,8 +8,8 @@ type SuperInputPropsType = {
 }
 
 
-const SuperInput = (props: SuperInputPropsType) => {
-
+const SuperInput = React.memo((props: SuperInputPropsType) => {
+    console.log('SuperInput is called')
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -31,6 +31,10 @@ const SuperInput = (props: SuperInputPropsType) => {
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if(error !== null){
+            setError(null);
+        }
+
         if (e.key === 'Enter') {
             onClickAddTaskHandler();
         }
@@ -52,6 +56,6 @@ const SuperInput = (props: SuperInputPropsType) => {
 
         </div>
     );
-};
+});
 
 export default SuperInput;
