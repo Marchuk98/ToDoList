@@ -4,25 +4,20 @@ import Delete from "@mui/icons-material/Delete";
 import Checkbox from '@mui/material/Checkbox';
 import EditableSpan from "./EditableSpan";
 import {TaskType} from "../Todolist";
-import {useDispatch} from "react-redux";
-import {removeTaskAC} from "../state/tasks-reducer";
 
 type TaskPropsType = {
     task:TaskType
     todolistId:string
     changeStatus:(todolistId: string, taskId: string, isDone: boolean)=> void
     editSpan: (todolistId: string, taskId: string, newTask: string) => void
+    removeTask: (todolistId: string, taskId: string) => void
 }
 
 export const Task = React.memo((props:TaskPropsType) => {
 
-    const dispatch = useDispatch()
-
     const removeTask = useCallback(() => {
-        const action = removeTaskAC(props.todolistId, props.task.id)
-        dispatch(action)
-    },[dispatch])
-
+        props.removeTask(props.todolistId,props.task.id)
+    },[props.removeTask,props.todolistId])
 
     const changeTaskStatus = useCallback((taskId: string, isDone: boolean) => {
         props.changeStatus(props.todolistId, taskId, isDone);
