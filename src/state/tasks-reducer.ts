@@ -1,6 +1,7 @@
 import {TasksStateType} from "../AppWithRedux";
 import {v1} from "uuid";
 import {AddTodolistActionType, RemoveTodolistActionType} from "./todolist-reducer";
+import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolists-api";
 
 
 export type removeTaskACType = {
@@ -17,7 +18,7 @@ export type addTaskACType = {
 export type changeTaskStatusACType = {
     type: "CHANGE-TASK-STATUS"
     taskId: string,
-    isDone: boolean,
+    status:TaskStatuses,
     todolistId: string
 }
 export type changeTaskTitleACType = {
@@ -54,14 +55,25 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             return {...state, [action.todolistId]: state[action.todolistId].filter(el => el.id !== action.taskId)}
         }
         case "ADD-TASK": {
-            const newTask = {id: v1(), title: action.title, isDone: false}
+            const newTask:TaskType = {id: v1(),
+                title: action.title,
+                status:TaskStatuses.New,
+                todoListId:action.todolistId,
+                description:'',
+                startDate:'',
+                deadline:'',
+                addedDate:'',
+                order:0,
+                priority:TaskPriorities.Low
+            }
+
             return {...state, [action.todolistId]: [newTask, ...state[action.todolistId]]}
         }
         case "CHANGE-TASK-STATUS": {
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(el => el.id === action.taskId
-                    ? {...el, isDone: action.isDone} : el)
+                    ? {...el,status:action.status} : el)
             }
         }
         case "EDIT-SPAN": {
@@ -107,12 +119,12 @@ export const addTaskAC = (todolistId: string, title: string): addTaskACType => {
     }
 }
 
-export const changeTaskStatusAC = (todolistId: string, taskId: string, isDone: boolean): changeTaskStatusACType => {
+export const changeTaskStatusAC = (todolistId: string, taskId: string, status:TaskStatuses): changeTaskStatusACType => {
     return {
         type: 'CHANGE-TASK-STATUS',
         todolistId,
         taskId,
-        isDone
+        status
     }
 }
 
