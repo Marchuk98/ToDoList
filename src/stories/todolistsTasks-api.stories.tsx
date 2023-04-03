@@ -7,14 +7,18 @@ export default {
 
 export const GetTasks = () => {
     const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        const todolistId = "78cf6079-7a35-4fcc-beb0-91f44a633a0e"
+    const [todolistId, setTodolistId] = useState<string>('')
+
+    const getTask = () => {
         todolistsApi.getTasks(todolistId)
             .then((res) => {
                 setState(res.data)
             })
-    }, [])
-    return <div>{JSON.stringify(state)}</div>
+    }
+    return <div>{JSON.stringify(state)}
+         <input value={todolistId} onChange={(e)=> setTodolistId(e.currentTarget.value)}/>
+        <button onClick={getTask}>get data</button>
+    </div>
 }
 
 

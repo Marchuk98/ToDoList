@@ -8,7 +8,7 @@ import {TaskType} from "../Todolist";
 type TaskPropsType = {
     task:TaskType
     todolistId:string
-    changeStatus:(todolistId: string, taskId: string, isDone: boolean)=> void
+    changeStatus:(todolistId: string, taskId: string, status:TaskStatuses: boolean)=> void
     editSpan: (todolistId: string, taskId: string, newTask: string) => void
     removeTask: (todolistId: string, taskId: string) => void
 }
@@ -19,8 +19,8 @@ export const Task = React.memo((props:TaskPropsType) => {
         props.removeTask(props.todolistId,props.task.id)
     },[props.removeTask,props.todolistId])
 
-    const changeTaskStatus = useCallback((taskId: string, isDone: boolean) => {
-        props.changeStatus(props.todolistId, taskId, isDone);
+    const changeTaskStatus = useCallback((taskId: string, status:TaskStatuses: boolean) => {
+        props.changeStatus(props.todolistId, taskId, status:TaskStatuses);
     },[props.changeStatus,props.todolistId])
 
     const changeTaskTitle = useCallback((taskId: string, newTask: string) => {
@@ -28,11 +28,11 @@ export const Task = React.memo((props:TaskPropsType) => {
     },[props.editSpan,props.todolistId])
 
     return (
-        <div key={props.task.id} className={props.task.isDone ? "is-Done" : ""}>
+        <div key={props.task.id} className={props.task.status:TaskStatuses ? "is-Done" : ""}>
             <Checkbox
                 color={"success"}
                 onChange={(e)=>changeTaskStatus(props.task.id, e.currentTarget.checked)}
-                checked={props.task.isDone}/>
+                checked={props.task.status:TaskStatuses}/>
             <EditableSpan
                 title={props.task.title}
                 callBack={(newTask)=>changeTaskTitle(props.task.id,newTask)}/>
