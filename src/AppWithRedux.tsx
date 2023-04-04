@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import SuperInput from "./components/SuperInput";
@@ -14,11 +14,11 @@ import Paper from "@mui/material/Paper";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    editTodoAC, FilterValuesType,
+    editTodoAC, FilterValuesType, getTodolistsTC,
     removeTodolistAC, TodolistDomainType,
-} from "./state/todolist-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "./state/store";
+} from "./state/todolists-reducer";
+import {useSelector} from "react-redux";
+import {AppRootState, useAppDispatch} from "./state/store";
 import {addTaskAC, changeTaskStatusAC, editSpanAC, removeTaskAC} from "./state/tasks-reducer";
 import {TaskStatuses, TaskType} from "./api/todolists-api";
 
@@ -31,9 +31,13 @@ function AppWithRedux() {
 
     console.log('App is called')
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch();
     const todolists = useSelector<AppRootState, TodolistDomainType[]>(state => state.todolists)
     const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
+
+    useEffect(() => {
+        dispatch(getTodolistsTC());
+    }, []);
 
     const removeTodolist = useCallback((todolistId: string) => {
         const action = removeTodolistAC(todolistId)
