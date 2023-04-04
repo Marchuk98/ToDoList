@@ -4,7 +4,8 @@ import { combineReducers, createStore } from 'redux'
 import { v1 } from 'uuid'
 import {AppRootState} from './store'
 import { tasksReducer } from './tasks-reducer'
-import { todolistsReducer } from './todolist-reducer'
+import { todolistsReducer } from './todolists-reducer'
+import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
 
 
 const rootReducer = combineReducers({
@@ -14,17 +15,21 @@ const rootReducer = combineReducers({
 
 const initialGlobalState = {
     todolists: [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all'}
+        {id: "todolistId1", title: 'What to learn', filter: 'all', addedDate: '', order: 0},
+        {id: "todolistId2", title: 'What to buy', filter: 'all', addedDate: '', order: 0}
     ],
     tasks: {
         ['todolistId1']: [
-            {id: v1(), title: 'HTML&CSS', status:TaskStatuses: true},
-            {id: v1(), title: 'JS', status:TaskStatuses: true}
+            { id: v1(), title: "CSS", status: TaskStatuses.New, todoListId: "todolistId1", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
+            { id: v1(), title: "JS", status: TaskStatuses.New, todoListId: "todolistId1", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
         ],
         ['todolistId2']: [
-            {id: v1(), title: 'Milk', status:TaskStatuses: true},
-            {id: v1(), title: 'React Book', status:TaskStatuses: true}
+            { id: v1(), title: "Milk", status: TaskStatuses.New, todoListId: "todolistId2", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
+            { id: v1(), title: "React book", status: TaskStatuses.New, todoListId: "todolistId2", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low },
         ]
     }
 }

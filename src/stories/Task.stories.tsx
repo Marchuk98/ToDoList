@@ -2,12 +2,14 @@ import React from 'react';
 import {action} from '@storybook/addon-actions';
 import { Task } from '../components/Task';
 import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
 
 export default {
     title: 'TODOLIST/Task Component',
     component: Task,
     args:{
-        task:{id:'1',title:"JS",status:TaskStatuses:true},
+        task:{id: '1', status: TaskStatuses.Completed, title: "CSS", todoListId: "todolistId1", description: '',
+            startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
         todolistId:"123",
         changeStatus:action('Change Task Status'),
         editSpan: action('Change Task Title'),
@@ -18,11 +20,11 @@ export default {
 
 const Template: ComponentStory<typeof Task> = (args)=> <Task {...args}/>
 
-export const Taskstatus:TaskStatusesExample = Template.bind({})
-
+export const Taskstatus: ComponentStory<typeof Task> = Template.bind({})
 
 export const TaskNotDoneExample = Template.bind({})
 TaskNotDoneExample.args ={
-    task:{id:'1',title:"CSS",status:TaskStatuses:false},
+    task:{id: '2', status: TaskStatuses.New, title: "CSS", todoListId: "todolistId1", description: '',
+        startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
 }
 
