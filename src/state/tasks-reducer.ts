@@ -1,7 +1,8 @@
 import {TasksStateType} from "../AppWithRedux";
 import {v1} from "uuid";
-import {AddTodolistActionType, RemoveTodolistActionType} from "./todolist-reducer";
-import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolists-api";
+import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistsActionType} from "./todolists-reducer";
+import {TaskPriorities, TaskStatuses, TaskType, todolistsApi} from "../api/todolists-api";
+import {Dispatch} from "redux";
 
 
 export type removeTaskACType = {
@@ -34,6 +35,12 @@ export type editSpanACType = {
     newTask: string
 }
 
+export type setTaskTypeACType = {
+    type: "SET-TASK"
+    tasks:TaskType[]
+    todolistId:string
+}
+
 
 type ActionType =
     removeTaskACType
@@ -43,6 +50,8 @@ type ActionType =
     | RemoveTodolistActionType
     | editSpanACType
     | AddTodolistActionType
+    | SetTodolistsActionType
+    | setTaskTypeACType
 
 
 
@@ -99,6 +108,13 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             delete stateCopy [action.id]
             return stateCopy;
         }
+        case "SET-TODOLISTS":{
+
+            return {...state, ...action.todolists.reduce((acc, el) => ({...acc, [el.id]: []}), {})}
+        }
+        case "SET-TASK":{
+            return {...state,[action.todolistId]:action.tasks}
+        }
         default:return state
     }
 }
@@ -143,5 +159,22 @@ export const editSpanAC = (todolistId: string, taskId: string, newTask: string):
         todolistId,
         taskId,
         newTask
+    }
+}
+
+export const setTaskAC = (todolistId:string,tasks:TaskType[],):setTaskTypeACType => {
+    return{
+        type: "SET-TASK",
+        todolistId,
+        tasks
+    }
+}
+
+export const getTasksTC = (todolistId:string) => {
+    return (dispatch:Dispatch)=>{
+        todolistsApi.getTasks(todolistId)
+            .then((res)=>{
+                dispatch(setTaskAC(todolistId,res.data.items))
+            })
     }
 }
