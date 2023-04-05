@@ -12,14 +12,17 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import {
-    addTodolistAC,
+    addTodolistTC,
     changeTodolistFilterAC,
-    editTodoAC, FilterValuesType, getTodolistsTC,
-    removeTodolistAC, TodolistDomainType,
+    editTodoTC,
+    FilterValuesType,
+    getTodolistsTC,
+    removeTodolistTC,
+    TodolistDomainType,
 } from "./state/todolists-reducer";
 import {useSelector} from "react-redux";
 import {AppRootState, useAppDispatch} from "./state/store";
-import {addTaskAC, changeTaskStatusAC, editSpanAC, removeTaskAC} from "./state/tasks-reducer";
+import {addTasksTC, removeTasksTC, updateTaskTC} from "./state/tasks-reducer";
 import {TaskStatuses, TaskType} from "./api/todolists-api";
 
 
@@ -40,23 +43,19 @@ function AppWithRedux() {
     }, []);
 
     const removeTodolist = useCallback((todolistId: string) => {
-        const action = removeTodolistAC(todolistId)
-        dispatch(action)
+        dispatch(removeTodolistTC(todolistId))
     }, [dispatch])
 
     const removeTask = useCallback((todolistId: string, taskId: string) => {
-        const action = removeTaskAC(todolistId, taskId)
-        dispatch(action)
+            dispatch(removeTasksTC(todolistId,taskId))
     },[dispatch])
 
     const changeStatus = useCallback((todolistId: string, taskId: string, status:TaskStatuses) => {
-        const action = changeTaskStatusAC(todolistId, taskId, status)
-        dispatch(action)
+        dispatch(updateTaskTC(todolistId,taskId, {status}))
     },[dispatch])
 
     const addTask = useCallback((todolistId: string, title: string) => {
-        const action = addTaskAC(todolistId, title)
-        dispatch(action)
+            dispatch(addTasksTC(todolistId,title))
     },[dispatch])
 
     const changeFilter = useCallback((todolistId: string, value: FilterValuesType) => {
@@ -64,17 +63,15 @@ function AppWithRedux() {
     }, [dispatch])
 
     const addTodolist = useCallback((newTitle: string) => {
-        const action = addTodolistAC(newTitle)
-        dispatch(action)
+        dispatch(addTodolistTC(newTitle))
     }, [dispatch])
 
     const editSpan = useCallback((todolistId: string, taskId: string, newTask: string) => {
-        const action = editSpanAC(todolistId, taskId, newTask)
-        dispatch(action)
+        dispatch(updateTaskTC(todolistId,taskId, {title:newTask}))
     },[dispatch])
 
     const editTodo = useCallback((todolistId: string, newTask: string) => {
-        dispatch(editTodoAC(todolistId, newTask))
+        dispatch(editTodoTC(todolistId,newTask))
     }, [dispatch])
 
 
