@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect} from "react";
-import {FilterValuesType} from "./state/todolists-reducer";
-import EditableSpan from "./components/EditableSpan";
-import SuperInput from "./components/SuperInput";
+import {FilterValuesType} from "../../../state/todolists-reducer";
+import EditableSpan from "../../../components/EditableSpan/EditableSpan";
+import AddItemForm from "../../../components/AddItemForm/AddItemForm";
 import IconButton from '@mui/material/IconButton/IconButton';
 import Delete from '@mui/icons-material/Delete';
 import Button from "@mui/material/Button";
-import {Task} from "./components/Task";
-import {TaskStatuses, TaskType} from "./api/todolists-api";
-import {useAppDispatch} from "./state/store";
-import {getTasksTC} from "./state/tasks-reducer";
+import {Task} from "./Task/Task";
+import {TaskStatuses, TaskType} from "../../../api/todolists-api";
+import {useAppDispatch} from "../../../state/store";
+import {getTasksTC} from "../../../state/tasks-reducer";
 
 
 type TodolistPropsType = {
@@ -66,7 +66,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                         <Delete/>
                     </IconButton>
                 </h3>
-                <SuperInput callBack={addTask}/>
+                <AddItemForm callBack={addTask}/>
             </div>
             <div>
                 {

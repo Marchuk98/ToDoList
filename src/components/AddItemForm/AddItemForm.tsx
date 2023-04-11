@@ -8,8 +8,8 @@ type SuperInputPropsType = {
 }
 
 
-const SuperInput = React.memo((props: SuperInputPropsType) => {
-    console.log('SuperInput is called')
+const AddItemForm = React.memo((props: SuperInputPropsType) => {
+    console.log('AddItemForm is called')
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -58,4 +58,4 @@ const SuperInput = React.memo((props: SuperInputPropsType) => {
     );
 });
 
-export default SuperInput;
+export default AddItemForm;
