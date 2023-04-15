@@ -1,7 +1,5 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import './App.css';
-import {Todolist} from '../features/TodolistsList/Todolist/Todolist';
-import AddItemForm from "../components/AddItemForm/AddItemForm";
 import IconButton from '@mui/material/IconButton';
 import AppBar from "@mui/material/AppBar";
 import Menu from "@mui/icons-material/Menu";
@@ -9,21 +7,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import {
-    addTodolistTC,
-    changeTodolistFilterAC,
-    editTodoTC,
-    FilterValuesType,
-    getTodolistsTC,
-    removeTodolistTC,
-    TodolistDomainType,
-} from "../state/todolists-reducer";
-import {useSelector} from "react-redux";
-import {AppRootState, useAppDispatch} from "../state/store";
-import {addTasksTC, removeTasksTC, updateTaskTC} from "../state/tasks-reducer";
-import {TaskStatuses, TaskType} from "../api/todolists-api";
+import {TaskType} from "../api/todolists-api";
+import {TodoListsList} from "../features/TodolistsList/TodoListsList";
 
 
 export type TasksStateType = {
@@ -34,12 +19,9 @@ function App() {
 
     console.log('App is called')
 
-
-
-
+    
     return (
         <div className="App">
-
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -59,80 +41,7 @@ function App() {
     );
 }
 
-const TodoListsList = () => {
 
-    const dispatch = useAppDispatch();
-    const todolists = useSelector<AppRootState, TodolistDomainType[]>(state => state.todolists)
-    const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
-
-    useEffect(() => {
-        dispatch(getTodolistsTC());
-    }, []);
-
-    const removeTodolist = useCallback((todolistId: string) => {
-        dispatch(removeTodolistTC(todolistId))
-    }, [dispatch])
-
-    const removeTask = useCallback((todolistId: string, taskId: string) => {
-        dispatch(removeTasksTC(todolistId, taskId))
-    }, [dispatch])
-
-    const changeStatus = useCallback((todolistId: string, taskId: string, status: TaskStatuses) => {
-        dispatch(updateTaskTC(todolistId, taskId, {status}))
-    }, [dispatch])
-
-    const addTask = useCallback((todolistId: string, title: string) => {
-        dispatch(addTasksTC(todolistId, title))
-    }, [dispatch])
-
-    const changeFilter = useCallback((todolistId: string, value: FilterValuesType) => {
-        dispatch(changeTodolistFilterAC(todolistId, value))
-    }, [dispatch])
-
-    const addTodolist = useCallback((newTitle: string) => {
-        dispatch(addTodolistTC(newTitle))
-    }, [dispatch])
-
-    const editSpan = useCallback((todolistId: string, taskId: string, newTask: string) => {
-        dispatch(updateTaskTC(todolistId, taskId, {title: newTask}))
-    }, [dispatch])
-
-    const editTodo = useCallback((todolistId: string, newTask: string) => {
-        dispatch(editTodoTC(todolistId, newTask))
-    }, [dispatch])
-
-    return todolists.map(el => {
-        return (
-            <>
-                <Grid container style={{padding: "20px"}}>
-                    <AddItemForm callBack={addTodolist}/>
-                </Grid>
-                <Grid container spacing={3}>
-                    {todolists.map(el => {
-                        return (<Grid item key={el.id}>
-                                <Paper style={{padding: "10px"}}>
-                                    <Todolist key={el.id}
-                                              todolistId={el.id}
-                                              title={el.title}
-                                              removeTodolist={removeTodolist}
-                                              tasks={tasks[el.id]}
-                                              removeTask={removeTask}
-                                              changeFilter={changeFilter}
-                                              addTask={addTask}
-                                              changeStatus={changeStatus}
-                                              filter={el.filter}
-                                              editSpan={editSpan}
-                                              editTodo={editTodo}
-                                    />
-                                </Paper>
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-            </>
-        );
-    })
-}
 
 
 
