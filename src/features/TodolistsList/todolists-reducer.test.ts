@@ -6,6 +6,7 @@ import {
     todolistsReducer
 } from "./todolists-reducer";
 import { v1 } from 'uuid'
+import { TodoListType } from "../../api/todolists-api";
 
 
 let todolistId1:string
@@ -32,15 +33,20 @@ test('correct todolist should be removed', () => {
     expect(endState[0].id).toBe(todolistId2)
 })
 
-// test('correct todolist should be added', () => {
-//     let newTodolistTitle = 'New Todolist'
-//
-//     const endState = todolistsReducer(startState, addTodolistAC(newTodolistTitle))
-//
-//     expect(endState.length).toBe(3)
-//     expect(endState[2].title).toBe(newTodolistTitle)
-//     expect(endState[2].filter).toBe("all")
-// })
+test('correct todolist should be added', () => {
+
+    let todolist: TodoListType = {
+        title: 'New Todolist',
+        id: 'any id',
+        addedDate: '',
+        order: 0
+    }
+    const endState = todolistsReducer(startState, addTodolistAC(todolist))
+
+    expect(endState.length).toBe(3)
+    expect(endState[2].title).toBe(todolist.title)
+    expect(endState[2].filter).toBe("all")
+})
 
 test('correct todolist should change its name', () => {
     let newTodolistTitle = 'New Todolist'
