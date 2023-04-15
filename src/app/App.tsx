@@ -9,6 +9,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import {TaskType} from "../api/todolists-api";
 import {TodoListsList} from "../features/TodolistsList/TodoListsList";
+import {LinearProgress} from "@mui/material";
+import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
 
 
 export type TasksStateType = {
@@ -19,9 +21,10 @@ function App() {
 
     console.log('App is called')
 
-    
+
     return (
         <div className="App">
+            <CustomizedSnackbars/>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -32,8 +35,8 @@ function App() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                <LinearProgress />
             </AppBar>
-
             <Container fixed>
                 <TodoListsList/>
             </Container>
