@@ -7,7 +7,7 @@ export type initialStateType = {
 
 const initialState:initialStateType = {
     status: 'idle',
-    error: "Some error"
+    error: null
 }
 
 export const appReducer = (state=initialState, action:ActionType):initialStateType => {
@@ -22,15 +22,13 @@ export const appReducer = (state=initialState, action:ActionType):initialStateTy
     }
 }
 
+export type appStatusACType = ReturnType<typeof appStatusAC>;
+export type appErrorACType = ReturnType<typeof appErrorAC>;
 type ActionType =
     | appStatusACType
-    | appErrorStatusACType
+    | appErrorACType
 
 
-type appStatusACType = ReturnType<typeof appStatusAC>
 
 export const appStatusAC = (status:EntityStatusType) => ({type: "APP/SET-STATUS", status}as const)
-
-type appErrorStatusACType = ReturnType<typeof appErrorStatusAC>
-
-export const appErrorStatusAC = (error: string | null) => ({type: "APP/SET-ERROR", error}as const)
+export const appErrorAC = (error: string | null) => ({type: "APP/SET-ERROR", error}as const)

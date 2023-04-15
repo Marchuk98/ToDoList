@@ -11,6 +11,8 @@ import {TaskType} from "../api/todolists-api";
 import {TodoListsList} from "../features/TodolistsList/TodoListsList";
 import {LinearProgress} from "@mui/material";
 import {CustomizedSnackbars} from "../components/ErrorSnackBar/ErrorSnackBar";
+import {useAppSelector} from "./store";
+import {EntityStatusType} from "../features/TodolistsList/todolists-reducer";
 
 
 export type TasksStateType = {
@@ -21,6 +23,7 @@ function App() {
 
     console.log('App is called')
 
+    const status = useAppSelector<EntityStatusType>(state => state.app.status)
 
     return (
         <div className="App">
@@ -35,7 +38,7 @@ function App() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
-                <LinearProgress />
+                {status === 'loading' && <LinearProgress />}
             </AppBar>
             <Container fixed>
                 <TodoListsList/>
