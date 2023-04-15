@@ -11,6 +11,7 @@ export const SET_TODOLISTS = "SET_TODOLISTS"
 const initialState: TodolistDomainType[] = []
 
 export type FilterValuesType = "all" | "completed" | "active"
+export type EntityStatusType = 'idle' | 'loading' | 'failed' | 'succeeded'
 
 export type TodolistDomainType = TodoListType & {
     filter: FilterValuesType
