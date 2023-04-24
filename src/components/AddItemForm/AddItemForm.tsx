@@ -5,10 +5,11 @@ import Add from "@mui/icons-material/Add";
 
 type SuperInputPropsType = {
     callBack: (newTitle: string) => void
+    disabled?:boolean
 }
 
 
-const AddItemForm = React.memo((props: SuperInputPropsType) => {
+const AddItemForm = React.memo(({callBack,disabled=false}: SuperInputPropsType) => {
     console.log('AddItemForm is called')
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -17,7 +18,7 @@ const AddItemForm = React.memo((props: SuperInputPropsType) => {
     const onClickAddTaskHandler = () => {
         let newTitle = title.trim();
         if (title !== '') {
-            props.callBack(newTitle)
+            callBack(newTitle)
             setTitle('');
         } else {
             setError('Title is required');
@@ -44,13 +45,14 @@ const AddItemForm = React.memo((props: SuperInputPropsType) => {
         <div>
             <TextField
                 variant="standard"
+                disabled={disabled}
                 label={'Type value'}
                 error={!!error}
                 value={title}
                 onChange={onChangeInputHandler}
                 onKeyDown={onKeyPressHandler}
                 helperText={error}/>
-            <IconButton onClick={onClickAddTaskHandler}>
+            <IconButton onClick={onClickAddTaskHandler} disabled={disabled}>
                 <Add sx={{fontSize: 40}} color={"success"}/>
             </IconButton>
 

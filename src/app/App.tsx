@@ -19,7 +19,11 @@ export type TasksStateType = {
     [key: string]: TaskType[];
 }
 
-function App() {
+type PropsType = {
+    demo?:boolean
+}
+
+function App ({demo=false}:PropsType) {
 
     console.log('App is called')
 
@@ -41,7 +45,7 @@ function App() {
                 {status === 'loading' && <LinearProgress />}
             </AppBar>
             <Container fixed>
-                <TodoListsList/>
+                <TodoListsList demo={demo}/>
             </Container>
         </div>
     );

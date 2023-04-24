@@ -22,13 +22,13 @@ export const appReducer = (state=initialState, action:ActionType):initialStateTy
     }
 }
 
-export type appStatusACType = ReturnType<typeof appStatusAC>;
-export type appErrorACType = ReturnType<typeof appErrorAC>;
+export type appStatusACType = ReturnType<typeof setAppStatusAC>;
+export type appErrorACType = ReturnType<typeof setAppErrorAC>;
 type ActionType =
     | appStatusACType
     | appErrorACType
 
 
 
-export const appStatusAC = (status:EntityStatusType) => ({type: "APP/SET-STATUS", status}as const)
-export const appErrorAC = (error: string | null) => ({type: "APP/SET-ERROR", error}as const)
+export const setAppStatusAC = (status:EntityStatusType) => ({type: "APP/SET-STATUS", status}as const)
+export const setAppErrorAC = (error: string | null) => ({type: "APP/SET-ERROR", error}as const)
