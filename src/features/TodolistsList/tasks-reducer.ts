@@ -9,7 +9,8 @@ import {
     removeTodolistACType, SET_TODOLISTS,
     setTodolistACType
 } from "./todolists-reducer";
-import {setAppErrorAC, appErrorACType, setAppStatusAC, appStatusACType} from "../../app/app-reducer";
+import {appErrorACType, setAppStatusAC, appStatusACType} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkAppError} from "../../utils/error-utils";
 
 const REMOVE_TASK = "REMOVE_TASK"
 const ADD_TASK = "ADD_TASK"
@@ -96,14 +97,12 @@ export const addTasksTC = (todolistId: string, title: string) => {
                     dispatch(addTaskAC(res.data.data.item))
                     dispatch(setAppStatusAC('succeeded'))
                 }else{
-                    if(res.data.messages.length){
-                        dispatch(setAppErrorAC(res.data.messages[0]))
-                    } else{
-                        dispatch(setAppErrorAC('Some error occurred'))
-                    }
-                    dispatch(setAppStatusAC('failed'))
+                    handleServerAppError(res.data,dispatch)
                 }
 
+            })
+            .catch((error)=>{
+                handleServerNetworkAppError(error,dispatch)
             })
     }
 }
@@ -128,8 +127,15 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel:Upd
         }
         todolistsApi.updateTask(todolistId,taskId,apiModel)
             .then((res)=>{
-                dispatch(updateTaskAC(todolistId,taskId,domainModel))
-                dispatch(setAppStatusAC('succeeded'))
+                if(res.data.resultCode === 0){
+                    dispatch(updateTaskAC(todolistId,taskId,domainModel))
+                    dispatch(setAppStatusAC('succeeded'))
+                }else {
+                    handleServerAppError(res.data,dispatch)
+                }
+            })
+            .catch((error)=>{
+                handleServerNetworkAppError(error,dispatch)
             })
     }
 }
