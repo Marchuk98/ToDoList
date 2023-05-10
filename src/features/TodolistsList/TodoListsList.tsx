@@ -1,4 +1,4 @@
-import {AppRootState, useAppDispatch} from "../../app/store";
+import {AppRootState, useAppDispatch, useAppSelector} from "../../app/store";
 import {useSelector} from "react-redux";
 import {
     addTodolistTC,
@@ -16,6 +16,7 @@ import AddItemForm from "../../components/AddItemForm/AddItemForm";
 import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist/Todolist";
 import {TasksStateType} from "../../app/App";
+import {Navigate} from "react-router-dom";
 
 
 type PropsType = {
@@ -27,9 +28,13 @@ export const TodoListsList:React.FC<PropsType> = ({demo = false}) => {
     const dispatch = useAppDispatch();
     const todolists = useSelector<AppRootState, TodolistDomainType[]>(state => state.todolists)
     const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
+
+
 
     useEffect(() => {
-        if(demo){
+        if(demo || !isLoggedIn){
             return
         }
         dispatch(getTodolistsTC());
@@ -66,6 +71,10 @@ export const TodoListsList:React.FC<PropsType> = ({demo = false}) => {
     const editTodo = useCallback((todolistId: string, newTask: string) => {
         dispatch(editTodoTC(todolistId, newTask))
     }, [dispatch])
+
+    if(!isLoggedIn){
+        return <Navigate to={"/login"}/>
+    }
 
     return <>
         <Grid container style={{padding: "20px"}}>

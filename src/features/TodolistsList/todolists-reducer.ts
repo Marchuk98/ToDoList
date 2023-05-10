@@ -1,6 +1,7 @@
 import {todolistsApi, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {appErrorACType, setAppStatusAC, appStatusACType} from "../../app/app-reducer";
+import {handleServerAppError} from "../../utils/error-utils";
 
 export const REMOVE_TODOLIST = "REMOVE_TODOLIST"
 export const ADD_TODO_LIST = "ADD_TODO_LIST"
@@ -63,12 +64,15 @@ export const setTodolistAC = (todolists: TodoListType[]) => ({  type: SET_TODOLI
 
 //thunk
 export const getTodolistsTC = () => {
-    return (dispatch: Dispatch<ActionType>) => {
+    return (dispatch: ThunkDispatch) => {
         dispatch(setAppStatusAC('loading'))
         todolistsApi.getTodolist()
             .then((res) => {
                 dispatch(setTodolistAC(res.data))
                 dispatch(setAppStatusAC('succeeded'))
+            })
+            .catch((error)=> {
+                handleServerAppError(error,dispatch);
             })
     }
 }
@@ -123,3 +127,5 @@ export type ActionType =
     | ReturnType<typeof editTodoAC>
     | ReturnType<typeof setTodolistAC>
     | ReturnType<typeof changeTodolistEntityStatusAC>
+
+type ThunkDispatch = Dispatch<ActionType | appStatusACType | appErrorACType >
