@@ -5,6 +5,7 @@ import thunk, {ThunkDispatch} from "redux-thunk";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {appReducer} from "./app-reducer";
 import {authReducer} from "../features/Login/auth-reducer";
+import {configureStore} from "@reduxjs/toolkit";
 
 export const rootReducer = combineReducers({
     todolists: todolistsReducer,
@@ -13,9 +14,18 @@ export const rootReducer = combineReducers({
     auth:authReducer
 })
 
+export const store = configureStore({
+    reducer:rootReducer,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware().concat(thunk)
+    }
+)
+
+
+
 export type AppRootState = ReturnType<typeof rootReducer>
 
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
+// export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
 
 type ThunkDispatchType = ThunkDispatch<AppRootState, any , AnyAction>
 

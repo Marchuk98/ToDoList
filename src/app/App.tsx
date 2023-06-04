@@ -34,7 +34,7 @@ function App({demo = false}: PropsType) {
 
     const status = useAppSelector<EntityStatusType>(state => state.app.status)
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const isInitialized = useAppSelector(state => state.app.initialized)
+    const isInitialized = useAppSelector(state => state.app.isInitialized)
 
     useEffect(() => {
         dispatch(initializeApp())
