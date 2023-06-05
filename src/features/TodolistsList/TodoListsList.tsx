@@ -2,7 +2,7 @@ import {AppRootState, useAppDispatch, useAppSelector} from "../../app/store";
 import {useSelector} from "react-redux";
 import {
     addTodolistTC,
-    changeTodolistFilterAC, editTodoTC,
+    changeTodolistFilterAC, changeTodolistTitleTC,
     FilterValuesType,
     getTodolistsTC,
     removeTodolistTC,
@@ -56,8 +56,8 @@ export const TodoListsList:React.FC<PropsType> = ({demo = false}) => {
         dispatch(addTasksTC(todolistId, title))
     }, [dispatch])
 
-    const changeFilter = useCallback((todolistId: string, filter: FilterValuesType) => {
-        dispatch(changeTodolistFilterAC(todolistId, filter))
+    const changeFilter = useCallback((id: string, filter: FilterValuesType) => {
+        dispatch(changeTodolistFilterAC({id,filter}))
     }, [dispatch])
 
     const addTodolist = useCallback((newTitle: string) => {
@@ -68,8 +68,8 @@ export const TodoListsList:React.FC<PropsType> = ({demo = false}) => {
         dispatch(updateTaskTC(todolistId, taskId, {title: newTask}))
     }, [dispatch])
 
-    const editTodo = useCallback((todolistId: string, newTask: string) => {
-        dispatch(editTodoTC(todolistId, newTask))
+    const changeTodolistTitle = useCallback((todolistId: string, newTask: string) => {
+        dispatch(changeTodolistTitleTC(todolistId, newTask))
     }, [dispatch])
 
     if(!isLoggedIn){
@@ -94,7 +94,7 @@ export const TodoListsList:React.FC<PropsType> = ({demo = false}) => {
                                       changeStatus={changeStatus}
                                       filter={el.filter}
                                       editSpan={editSpan}
-                                      editTodo={editTodo}
+                                      editTodo={changeTodolistTitle}
                                       demo={demo}
                             />
                         </Paper>

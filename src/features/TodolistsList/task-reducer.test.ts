@@ -1,8 +1,6 @@
 import {
-    addTaskAC,
-    changeTaskTitleAC,
-    removeTaskAC, setTaskAC,
-    tasksReducer, updateTaskAC
+    tasksAction,
+    tasksReducer,
 } from './tasks-reducer'
 import {TasksStateType} from "../../app/App";
 import {addTodolistAC, removeTodolistAC, setTodolistAC} from "./todolists-reducer";
@@ -35,7 +33,7 @@ beforeEach(() => {
 
 test('correct task should be deleted from correct array', () => {
 
-    const action = removeTaskAC('todolistId2','2')
+    const action = tasksAction.removeTaskAC({todolistId:'todolistId2',taskId:'2'})
 
     const endState = tasksReducer(startState, action)
 
@@ -46,17 +44,18 @@ test('correct task should be deleted from correct array', () => {
 
 test('correct task should be added to correct array', () => {
 
-    const action = addTaskAC({
-        todoListId: "todolistId2",
-        title: "juce",
-        status: TaskStatuses.New,
-        addedDate: "",
-        deadline: "",
-        description: "",
-        order: 0,
-        priority: 0,
-        startDate: "",
-        id: "id exists"
+    const action = tasksAction.addTaskAC({task:{
+            todoListId: "todolistId2",
+            title: "juce",
+            status: TaskStatuses.New,
+            addedDate: "",
+            deadline: "",
+            description: "",
+            order: 0,
+            priority: 0,
+            startDate: "",
+            id: "id exists"
+        }
     });
 
     const endState = tasksReducer(startState, action)
@@ -69,7 +68,8 @@ test('correct task should be added to correct array', () => {
 })
 
 test('status of specified task should be changed', () => {
-    const action = updateTaskAC('todolistId2','2',{status:TaskStatuses.Completed})
+    const action = tasksAction.updateTaskAC({todolistId:
+            'todolistId2',taskId:'2',model:{status:TaskStatuses.Completed}})
 
     const endState = tasksReducer(startState, action)
 
@@ -79,7 +79,7 @@ test('status of specified task should be changed', () => {
 
 test('title of specified task should be changed', () => {
 
-    const action = changeTaskTitleAC('2', 'jice', 'todolistId2')
+    const action = tasksAction.changeTaskTitleAC({taskId:'2',title:'jice',todolistId:'todolistId2'})
 
     const endState = tasksReducer(startState, action)
 
@@ -89,15 +89,14 @@ test('title of specified task should be changed', () => {
 
 test('new array should be added when new todolist is added', () => {
 
+    const testAddTodoList = {
+        id: "blabla",
+        title: "new todolist",
+        order: 0,
+        addedDate: ''
+    }
 
-    const action = addTodolistAC(
-        {
-            id: "blabla",
-            title: "new todolist",
-            order: 0,
-            addedDate: ''
-        }
-    )
+    const action = addTodolistAC({todolist:testAddTodoList})
 
     const endState = tasksReducer(startState, action)
 
@@ -114,7 +113,7 @@ test('new array should be added when new todolist is added', () => {
 
 test('property with todolistId should be deleted', () => {
 
-    const action = removeTodolistAC('todolistId2')
+    const action = removeTodolistAC({todolistId:'todolistId2'})
 
     const endState = tasksReducer(startState, action)
 
@@ -127,10 +126,12 @@ test('property with todolistId should be deleted', () => {
 
 test('property with todolistId should be deleted', () => {
 
-    const action = setTodolistAC([
-        {id: "1", title: 'What to learn', addedDate: '', order: 0},
-        {id: "2", title: 'What to buy', addedDate: '', order: 0}
-    ])
+    const action = setTodolistAC({todolists:
+            [
+                {id: "1", title: 'What to learn', addedDate: '', order: 0},
+                {id: "2", title: 'What to buy', addedDate: '', order: 0}
+            ]
+    })
 
     const endState = tasksReducer({}, action)
 
@@ -145,7 +146,7 @@ test('property with todolistId should be deleted', () => {
 
 test('task should be added for todolist', () => {
 
-   const action = setTaskAC("todolistId1",startState["todolistId1"])
+   const action = tasksAction.setTaskAC({todolistId:"todolistId1",tasks:startState["todolistId1"]})
 
     const endState = tasksReducer({
         "todolistId2":[],
