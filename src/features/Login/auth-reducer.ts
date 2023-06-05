@@ -3,6 +3,9 @@ import {authApi, LoginParamsType} from "../../api/todolists-api";
 import {handleServerAppError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {setAppStatus} from "../../app/app-reducer";
+import {tasksAction} from "../TodolistsList/tasks-reducer";
+import {todolistActions} from "../TodolistsList/todolists-reducer";
+import {clearTasksAndTodoLists} from "../../common/actions/actions";
 
 
 const initialState = {
@@ -45,6 +48,7 @@ export const logout = () => (dispatch: Dispatch) => {
         .then(response => {
             if (response.data.resultCode === 0) {
                 dispatch(setIsLoggedIn({isLoggedIn:false}))
+                dispatch(clearTasksAndTodoLists())
                 dispatch(setAppStatus({status:"succeeded"}))
             } else {
                 handleServerAppError(response.data, dispatch)

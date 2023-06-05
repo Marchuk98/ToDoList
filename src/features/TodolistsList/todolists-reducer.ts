@@ -3,6 +3,8 @@ import {Dispatch} from "redux";
 import {appErrorACType, appStatusACType, setAppStatus} from "../../app/app-reducer";
 import {handleServerAppError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {clearTasksAndTodoLists} from "../../common/actions/actions";
+import {action} from "@storybook/addon-actions";
 
 export const REMOVE_TODOLIST = "REMOVE_TODOLIST"
 export const ADD_TODO_LIST = "ADD_TODO_LIST"
@@ -48,6 +50,12 @@ const slise = createSlice({
         setTodolistAC(state,action:PayloadAction<{todolists: TodoListType[]}>) {
             return action.payload.todolists.map(el => ({...el,filter:'all',entityStatus:'idle'}))
         },
+    },
+    extraReducers:builder => {
+        builder
+            .addCase(clearTasksAndTodoLists,()=> {
+                return []
+            })
     }
 })
 export const todolistsReducer = slise.reducer
