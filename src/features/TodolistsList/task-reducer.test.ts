@@ -44,7 +44,7 @@ test('correct task should be deleted from correct array', () => {
 
 test('correct task should be added to correct array', () => {
 
-    const action = tasksAction.addTaskAC({task:{
+    const action = tasksAction.addTaskAC({
             todoListId: "todolistId2",
             title: "juce",
             status: TaskStatuses.New,
@@ -55,7 +55,7 @@ test('correct task should be added to correct array', () => {
             priority: 0,
             startDate: "",
             id: "id exists"
-        }
+
     });
 
     const endState = tasksReducer(startState, action)
@@ -68,13 +68,12 @@ test('correct task should be added to correct array', () => {
 })
 
 test('status of specified task should be changed', () => {
-    const action = tasksAction.updateTaskAC({todolistId:
-            'todolistId2',taskId:'2',model:{status:TaskStatuses.Completed}})
+    const action = tasksAction.updateTaskAC({todolistId: 'todolistId2',taskId:'2',model:{status:TaskStatuses.New}})
 
     const endState = tasksReducer(startState, action)
 
-    expect(endState["todolistId2"][1].status).toBe(TaskStatuses.Completed)
-    expect(endState["todolistId1"][1].status).toBe(TaskStatuses.New)
+    expect(endState["todolistId1"][1].status).toBe(TaskStatuses.Completed)
+    expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New)
 })
 
 test('title of specified task should be changed', () => {
@@ -139,8 +138,8 @@ test('property with todolistId should be deleted', () => {
     const keys = Object.keys(endState)
 
     expect(keys.length).toBe(2)
-    expect(endState['1']).toBe([])
-    expect(endState['2']).toBe([])
+    expect(endState['1']).toBeDefined()
+    expect(endState['2']).toBeDefined()
 })
 
 

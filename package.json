@@ -93,5 +93,10 @@
     "puppeteer": "^19.8.0",
     "start-server-and-test": "^2.0.0",
     "webpack": "^5.76.3"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
   }
 }
