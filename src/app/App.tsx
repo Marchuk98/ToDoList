@@ -50,7 +50,6 @@ function App({demo = false}: PropsType) {
         </div>
     }
     return (
-        <BrowserRouter>
             <div className="App">
                 <CustomizedSnackbars/>
                 <AppBar position="static">
@@ -70,7 +69,6 @@ function App({demo = false}: PropsType) {
                     <Route path='/login' element={<Login/>}/>
                 </Routes>
             </div>
-        </BrowserRouter>
     );
 }
 

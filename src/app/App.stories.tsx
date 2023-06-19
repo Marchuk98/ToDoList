@@ -1,11 +1,12 @@
 import React from 'react';
 import App from "./App";
-import {ReduxStoreProviderDecorator} from "../state/ReduxStoreProviderDecorator";
+import {BrowserRouterDecorator, ReduxStoreProviderDecorator} from "../state/ReduxStoreProviderDecorator";
+
 
 export default {
     title: 'TODOLIST/App Component',
     component: App,
-    decorators:[ReduxStoreProviderDecorator]
+    decorators:[ReduxStoreProviderDecorator,BrowserRouterDecorator]
 }
 
 

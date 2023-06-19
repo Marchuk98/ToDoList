@@ -22,8 +22,9 @@ export const store = configureStore({
 )
 
 
+export type RootReducerType = typeof rootReducer
 
-export type AppRootState = ReturnType<typeof rootReducer>
+export type AppRootState = ReturnType<RootReducerType>
 
 // export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
 

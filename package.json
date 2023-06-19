@@ -84,6 +84,8 @@
     "@storybook/preset-create-react-app": "^4.1.2",
     "@storybook/react": "^6.5.16",
     "@storybook/testing-library": "^0.0.13",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/storybook-react-router": "^1.0.3",
     "babel-loader": "^8.3.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "babel-plugin-polyfill-regenerator": "^0.4.1",
@@ -92,6 +94,7 @@
     "prop-types": "^15.8.1",
     "puppeteer": "^19.8.0",
     "start-server-and-test": "^2.0.0",
+    "storybook-react-router": "^1.0.8",
     "webpack": "^5.76.3"
   },
   "jest": {
