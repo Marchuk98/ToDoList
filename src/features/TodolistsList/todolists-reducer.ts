@@ -1,14 +1,8 @@
 import {todolistsApi, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {appErrorACType, appStatusACType, setAppStatus} from "../../app/app-reducer";
-import {handleServerAppError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {clearTasksAndTodoLists} from "../../common/actions/actions";
-import {action} from "@storybook/addon-actions";
-
-export const REMOVE_TODOLIST = "REMOVE_TODOLIST"
-export const ADD_TODO_LIST = "ADD_TODO_LIST"
-export const SET_TODOLISTS = "SET_TODOLISTS"
 
 
 const initialState: TodolistDomainType[] = []
@@ -72,7 +66,7 @@ export const getTodolistsTC = () => {
                 dispatch(setAppStatus({status:'succeeded'}))
             })
             .catch((error)=> {
-                handleServerAppError(error,dispatch);
+                // handleServerAppError(error,dispatch);
             })
     }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import App from "./App";
-import {BrowserRouterDecorator, ReduxStoreProviderDecorator} from "../state/ReduxStoreProviderDecorator";
+import {BrowserRouterDecorator, ReduxStoreProviderDecorator} from "../stories/decorators/ReduxStoreProviderDecorator";
 
 
 export default {

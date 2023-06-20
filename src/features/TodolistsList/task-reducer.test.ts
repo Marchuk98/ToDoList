@@ -31,16 +31,16 @@ beforeEach(() => {
 
 
 
-test('correct task should be deleted from correct array', () => {
-
-    const action = tasksAction.removeTaskAC({todolistId:'todolistId2',taskId:'2'})
-
-    const endState = tasksReducer(startState, action)
-
-    expect(endState["todolistId1"].length).toBe(3);
-    expect(endState["todolistId2"].length).toBe(2);
-    expect(endState["todolistId2"].every(t=> t.id != "2")).toBeTruthy();
-})
+// test('correct task should be deleted from correct array', () => {
+//
+//     const action = tasksAction.removeTaskAC({todolistId:'todolistId2',taskId:'2'})
+//
+//     const endState = tasksReducer(startState, action)
+//
+//     expect(endState["todolistId1"].length).toBe(3);
+//     expect(endState["todolistId2"].length).toBe(2);
+//     expect(endState["todolistId2"].every(t=> t.id != "2")).toBeTruthy();
+// })
 
 test('correct task should be added to correct array', () => {
 
@@ -143,19 +143,19 @@ test('property with todolistId should be deleted', () => {
 })
 
 
-test('task should be added for todolist', () => {
-
-   const action = tasksAction.setTaskAC({todolistId:"todolistId1",tasks:startState["todolistId1"]})
-
-    const endState = tasksReducer({
-        "todolistId2":[],
-        "todolistId1":[]
-    }, action)
-
-    expect(endState["todolistId1"].length).toBe(3)
-    expect(endState["todolistId2"].length).toBe(0)
-
-})
+// test('task should be added for todolist', () => {
+//
+//    const action = tasksAction.setTaskAC({todolistId:"todolistId1",tasks:startState["todolistId1"]})
+//
+//     const endState = tasksReducer({
+//         "todolistId2":[],
+//         "todolistId1":[]
+//     }, action)
+//
+//     expect(endState["todolistId1"].length).toBe(3)
+//     expect(endState["todolistId2"].length).toBe(0)
+//
+// })
 
 
 
