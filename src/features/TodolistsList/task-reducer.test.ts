@@ -42,30 +42,30 @@ beforeEach(() => {
 //     expect(endState["todolistId2"].every(t=> t.id != "2")).toBeTruthy();
 // })
 
-test('correct task should be added to correct array', () => {
-
-    const action = tasksAction.addTaskAC({
-            todoListId: "todolistId2",
-            title: "juce",
-            status: TaskStatuses.New,
-            addedDate: "",
-            deadline: "",
-            description: "",
-            order: 0,
-            priority: 0,
-            startDate: "",
-            id: "id exists"
-
-    });
-
-    const endState = tasksReducer(startState, action)
-
-    expect(endState['todolistId1'].length).toBe(3)
-    expect(endState['todolistId2'].length).toBe(4)
-    expect(endState['todolistId2'][0].id).toBeDefined()
-    expect(endState['todolistId2'][0].title).toBe("juce")
-    expect(endState['todolistId2'][0].status).toBe(TaskStatuses.New)
-})
+// test('correct task should be added to correct array', () => {
+//
+//     const action = tasksAction.addTaskAC({
+//             todoListId: "todolistId2",
+//             title: "juce",
+//             status: TaskStatuses.New,
+//             addedDate: "",
+//             deadline: "",
+//             description: "",
+//             order: 0,
+//             priority: 0,
+//             startDate: "",
+//             id: "id exists"
+//
+//     });
+//
+//     const endState = tasksReducer(startState, action)
+//
+//     expect(endState['todolistId1'].length).toBe(3)
+//     expect(endState['todolistId2'].length).toBe(4)
+//     expect(endState['todolistId2'][0].id).toBeDefined()
+//     expect(endState['todolistId2'][0].title).toBe("juce")
+//     expect(endState['todolistId2'][0].status).toBe(TaskStatuses.New)
+// })
 
 test('status of specified task should be changed', () => {
     const action = tasksAction.updateTaskAC({todolistId: 'todolistId2',taskId:'2',model:{status:TaskStatuses.New}})

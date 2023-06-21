@@ -1,9 +1,7 @@
 import {EntityStatusType} from "../features/TodolistsList/todolists-reducer";
-import {Dispatch} from "redux";
 import {authApi} from "../api/todolists-api";
 import {setIsLoggedIn} from "../features/Login/auth-reducer";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export type InitialStateType = {
     status:EntityStatusType
@@ -17,6 +15,19 @@ const initialState:InitialStateType = {
     isInitialized:false
 }
 
+export const initializeApp = createAsyncThunk(
+    "app/initializeApp", async (_,{dispatch}) => {
+        dispatch(setAppStatus({status:'loading'}))
+            const res = await authApi.me()
+            if(res.data.resultCode === 0){
+                dispatch(setIsLoggedIn({isLoggedIn:true}))
+            }else{
+
+            }
+
+    }
+)
+
 const slice = createSlice({
     name:"app",
     initialState,
@@ -27,27 +38,17 @@ const slice = createSlice({
         setAppError(state,action:PayloadAction<{error: string | null}>) {
             state.error = action.payload.error
         },
-        setAppInitialized(state,action:PayloadAction<{isInitialized:boolean}>) {
-            state.isInitialized = action.payload.isInitialized
-        }
-
+    },
+    extraReducers:builder => {
+        builder
+            .addCase(initializeApp.fulfilled,(state, action)=>{
+                state.isInitialized = true
+            })
     }
 })
 
 export const appReducer = slice.reducer
-export const {setAppStatus,setAppError,setAppInitialized} = slice.actions
-
-export const initializeApp = () => (dispatch:Dispatch) => {
-    authApi.me()
-        .then(response => {
-            if(response.data.resultCode === 0){
-                dispatch(setIsLoggedIn({isLoggedIn:true}))
-            }else {
-
-            }
-            dispatch(setAppInitialized({isInitialized:true}))
-        })
-}
+export const {setAppStatus,setAppError} = slice.actions
 
 export type appErrorACType = ReturnType<typeof setAppError>
 export type appStatusACType = ReturnType<typeof setAppStatus>

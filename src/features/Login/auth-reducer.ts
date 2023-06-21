@@ -6,12 +6,11 @@ import {clearTasksAndTodoLists} from "../../common/actions/actions";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../utils/error-utils";
 import {AxiosError} from "axios";
 
-
 const initialState = {
     isLoggedIn: false
 }
 
-export const login = createAsyncThunk<{isLoggedIn:boolean},LoginParamsType,
+export const login = createAsyncThunk<void,LoginParamsType,
     {rejectValue:{errors:Array<string>, fieldsErrors?:Array<FieldErrorType>}}>(
     'auth/login', async (data,thunkAPI) => {
         thunkAPI.dispatch(setAppStatus({status:'loading'}))
@@ -19,7 +18,7 @@ export const login = createAsyncThunk<{isLoggedIn:boolean},LoginParamsType,
             const res = await authApi.login(data)
             if(res.data.resultCode === 0){
                 thunkAPI.dispatch(setAppStatus({status:"succeeded"}))
-               return  {isLoggedIn:true};
+               return;
             }else {
                 handleAsyncServerAppError(res.data, thunkAPI)
                 return thunkAPI.rejectWithValue({errors:res.data.messages, fieldsErrors: res.data.fieldsErrors})
@@ -28,6 +27,26 @@ export const login = createAsyncThunk<{isLoggedIn:boolean},LoginParamsType,
             const error: AxiosError = err;
            handleAsyncServerNetworkError(err,thunkAPI)
             return thunkAPI.rejectWithValue({errors:[error.message], fieldsErrors:undefined})
+        }
+    }
+)
+
+export const logout = createAsyncThunk(
+    'auth/logout', async (_,thunkAPI) => {
+        thunkAPI.dispatch(setAppStatus({status:'loading'}))
+        try {
+            const res = await authApi.logout()
+            if(res.data.resultCode === 0){
+                thunkAPI.dispatch(clearTasksAndTodoLists())
+                thunkAPI.dispatch(setAppStatus({status:"succeeded"}))
+                return;
+            }else{
+                handleAsyncServerAppError(res.data,thunkAPI)
+                return thunkAPI.rejectWithValue({})
+            }
+        }catch (err:any){
+                handleAsyncServerNetworkError(err,thunkAPI)
+            return thunkAPI.rejectWithValue({})
         }
     }
 )
@@ -43,7 +62,10 @@ const slice = createSlice({
     extraReducers:builder => {
         builder
             .addCase(login.fulfilled,(state, action)=> {
-                      state.isLoggedIn = action.payload.isLoggedIn
+                      state.isLoggedIn = true
+            })
+            .addCase(logout.fulfilled,(state, action)=> {
+                state.isLoggedIn = false
             })
     }
 })
@@ -51,19 +73,3 @@ const slice = createSlice({
 export const {setIsLoggedIn} = slice.actions
 export const authReducer = slice.reducer
 
-export const logout = () => (dispatch: Dispatch) => {
-    dispatch(setAppStatus({status:'loading'}))
-    authApi.logout()
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(setIsLoggedIn({isLoggedIn:false}))
-                dispatch(clearTasksAndTodoLists())
-                dispatch(setAppStatus({status:"succeeded"}))
-            } else {
-                // handleServerAppError(response.data, dispatch)
-            }
-        })
-        .catch((error) => {
-            // handleServerAppError(error, dispatch);
-        })
-}
