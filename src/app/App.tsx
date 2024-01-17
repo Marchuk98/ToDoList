@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import {useActions} from "../common/hooks/useActions";
 import {authThunks} from "../features/auth/model/authSlice";
 import {selectIsInitialized} from "./appSelectors";
-import {HashRouter} from "react-router-dom";
+import {BrowserRouter, HashRouter} from "react-router-dom";
 import {ErrorSnackbar} from "../common/components/ErrorSnackBar/ErrorSnackBar";
 import {Header} from "../features/Header/Header";
 import {Routing} from "../features/Routing/Routing";
@@ -35,13 +35,13 @@ function App() {
     }
 
     return (
-        <HashRouter>
+        <BrowserRouter>
             <div className="App">
                 <ErrorSnackbar/>
                 <Header/>
                 <Routing/>
             </div>
-        </HashRouter>
+        </BrowserRouter>
     );
 }
 
