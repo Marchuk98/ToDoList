@@ -1,37 +1,20 @@
-import {todolistsReducer} from "../features/TodolistsList/todolists-reducer";
-import {tasksReducer} from "../features/TodolistsList/tasks-reducer";
-import {combineReducers, legacy_createStore,applyMiddleware,AnyAction} from "redux";
-import thunk, {ThunkDispatch} from "redux-thunk";
-import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import {appReducer} from "./app-reducer";
-import {authReducer} from "../features/Login/auth-reducer";
+import {todolistsSlice} from "../features/TodolistsList/model/todolists/todolistsSlice";
+import {taskSlice} from "../features/TodolistsList/model/tasks/taskSlice";
+import {appSlice} from "./appSlice";
+import {authSlice} from "../features/auth/model/authSlice";
 import {configureStore} from "@reduxjs/toolkit";
 
-export const rootReducer = combineReducers({
-    todolists: todolistsReducer,
-    tasks: tasksReducer,
-    app: appReducer,
-    auth:authReducer
+export const store = configureStore({
+    reducer:{
+        todolists: todolistsSlice,
+        tasks: taskSlice,
+        app: appSlice,
+        auth:authSlice
+    }
 })
 
-export const store = configureStore({
-    reducer:rootReducer,
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware().concat(thunk)
-    }
-)
-
-
-export type RootReducerType = typeof rootReducer
-
-export type AppRootState = ReturnType<RootReducerType>
-
-// export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
-
-type ThunkDispatchType = ThunkDispatch<AppRootState, any , AnyAction>
-
-export const useAppDispatch = () =>  useDispatch<ThunkDispatchType>()
-export const useAppSelector: TypedUseSelectorHook<AppRootState> = useSelector
+export type AppRootStateType = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 
 // @ts-ignore
